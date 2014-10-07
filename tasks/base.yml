@@ -1,0 +1,42 @@
+---
+# tasks file for base
+
+# - name: Ensure spanish locale exists.
+#   locale_gen: name={{ locale }} state=present
+
+# - name: Set locale
+#   command: /usr/sbin/update-locale LANG={{ locale }} LC_ALL=$locale
+#   tags: base
+
+- name: Create backup from localtime
+  command: cp /etc/localtime /etc/localtime.bak
+  tags:
+    - base
+    
+- name: Set /etc/localtime
+  file: src=/usr/share/zoneinfo/{{ timezone }} dest=/etc/localtime
+  notify:
+    - update timezone
+  tags: base
+
+- name: Install wget
+  apt: pkg=wget state=latest
+  tags: base
+
+- name: Install curl
+  apt: pkg=curl state=latest
+  tags: base
+
+- name: Install ntp
+  apt: pkg=ntp state=latest
+  tags: base
+
+- name: Configure NTP in /etc/ntp.conf
+  template: src=ntp.conf dest=/etc/ntp.conf
+  notify:
+    - restart ntp    
+  tags: base
+
+- name: Be sure ntpd is running and enabled
+  service: name=ntp state=started enabled=yes
+  tags: base
