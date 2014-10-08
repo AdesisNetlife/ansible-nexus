@@ -53,6 +53,21 @@
   replace: dest={{ nexus.home }}/bin/nexus regexp='^#RUN_AS_USER=(.*)$' replace='RUN_AS_USER=nexus'
   tags: nexus 
 
-- name: Change Nexus pidfile in binary file
+- name: Change Nexus piddir in binary file
   replace: dest={{ nexus.home }}/bin/nexus regexp='^#PIDDIR=(.*)$' replace='PIDDIR=/home/nexus'
-  tags: nexus    
+  tags: nexus
+
+- name: Copy Nexus binary to /etc/init.d
+  command: "cp {{ nexus.home }}/bin/nexus /etc/init.d/nexus creates=/etc/init.d/nexus"
+  tags: nexus
+
+- name: Make Nexus script executable
+  file: path=/etc/init.d/nexus mode=755
+  tags: nexus
+
+- name: Enable Nexus service
+  service: name=nexus enabled=yes
+  notify: restart nexus
+  tags: nexus
+
+
