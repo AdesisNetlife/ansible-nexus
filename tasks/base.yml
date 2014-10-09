@@ -6,16 +6,12 @@
   notify: update timezone
   tags: base
     
-- name: Install wget
-  apt: pkg=wget state=latest
-  tags: base
-
-- name: Install curl
-  apt: pkg=curl state=latest
-  tags: base
-
-- name: Install ntp
-  apt: pkg=ntp state=latest
+- name: Install packages
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - wget
+    - curl
+    - ntp
   tags: base
 
 - name: Configure NTP in /etc/ntp.conf
