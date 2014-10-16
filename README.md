@@ -42,6 +42,44 @@ with
 
 ### Create host specific variables
 
+Make the host_vars directory where *ansible.host* file is located.
+
+```bash
+$ mkdir host_vars
+```
+
+Create a file in the newly created directory matching your host.
+
+```bash
+$ cd host_vars
+$ vi 127.0.0.1
+```
+
+with
+
+```yaml
+---
+
+timezone: Europe/Madrid
+
+# NTP servers
+ntp_server1: ntp0.ox.ac.uk
+ntp_server2: ntp1.ox.ac.uk
+ntp_server3: ntp2.ox.ac.uk
+ntp_server4: ntp3.ox.ac.uk
+ntp_server5: 0.uk.pool.ntp.org
+ntp_server6: 1.uk.pool.ntp.org
+ntp_server7: ntp.ubuntu.com # fallback
+
+# NEXUS
+nexus:
+  version: 2.10.0
+  unpackaged_version: 2.10.0-02
+  base_dir: /opt
+  home: /opt/nexus
+  data_dir: /data
+```
+
 ### Run the playbook
 
 First create a playbook including the nexus role, naming it nexus.yml
